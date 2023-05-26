@@ -95,6 +95,11 @@ class ObjectRPS {
 let rock;
 let paper;
 let scissors;
+let rockPosVec;
+let paperPosVec;
+let scissorPosVec;
+let speedPosVec;
+let startButtonPosVec;
 function preload() {
     rock = loadImage("images/rock.png");
     paper = loadImage("images/paper.png");
@@ -197,6 +202,7 @@ let game = {
             // display how many of each type of object there are on the screen
             fill(255);
             textSize(16);
+            textAlign(LEFT);
             text("Rocks: " + counts[0], 10, 20);
             text("Papers: " + counts[1], 10, 40);
             text("Scissors: " + counts[2], 10, 60);
@@ -234,31 +240,46 @@ let game = {
     // this method displays the start screen and allows the user to change the game's parameters
     start: function () {
         frameRate(5);
+        textAlign(CENTER, CENTER);
         // display the start screen
         // display the title
         fill(255);
-        textSize(32);
-        text("Rock Paper Scissors", 200, 200);
+        let titleSize = windowWidth / 15;
+        textSize(titleSize);
+        text("Rock Paper Scissors", windowWidth / 2, windowHeight / 5);
         // display the instructions
         fill(255);
-        textSize(16);
-        text("Left click to add rocks, papers, and scissors to the screen. Right click to remove them", 200, 250);
-        text("The game will end when there is only one type of object on the screen.", 200, 300);
+        let instrSize = windowWidth / 40;
+        textSize(instrSize);
+        text("Left click to add rocks, papers, and scissors to the screen. Right click to remove them", windowWidth / 2, windowHeight / 3);
+        text("The game will end when there is only one type of object on the screen.", windowWidth / 2, windowHeight / 2.5);
         // display the parameters
         fill(255);
-        textSize(16);
-        text("Number of rocks: " + this.numRocks, 200, 350);
-        text("Number of papers: " + this.numPapers, 200, 375);
-        text("Number of scissors: " + this.numScissors, 200, 400);
+        let paramSize = windowWidth / 32;
+        // set max size to 32
+        if (paramSize > 32) {
+            paramSize = 32;
+        }
+        textSize(paramSize);
+        // save positions of the text for rocks, papers, and scissors
+        rockPosVec = createVector(windowWidth / 2, windowHeight / 2);
+        paperPosVec = createVector(windowWidth / 2, windowHeight / 1.9);
+        scissorPosVec = createVector(windowWidth / 2, windowHeight / 1.8);
+        text("Number of rocks: " + this.numRocks, rockPosVec.x, rockPosVec.y);
+        text("Number of papers: " + this.numPapers, paperPosVec.x, paperPosVec.y);
+        text("Number of scissors: " + this.numScissors, scissorPosVec.x, scissorPosVec.y);
 
         // speed of game
         let speed;
         if (this.speed == 1) { speed = "slow" } else if (this.speed == 2) { speed = "medium" } else { speed = "fast" };
-        text("Speed of game: " + speed + " (Click to change)", 200, 425);
+        speedPosVec = createVector(windowWidth / 2, windowHeight / 1.6);
+        text("Speed of game: " + speed + " (Click to change)", speedPosVec.x, speedPosVec.y);
         // display the buttons
         fill(255);
-        textSize(16);
-        text("Click to start the game.", 200, 525);
+        let buttonSize = windowWidth / 40;
+        textSize(buttonSize);
+        startButtonPosVec = createVector(windowWidth / 2, windowHeight / 1.3);
+        text("Click to start the game.", startButtonPosVec.x, startButtonPosVec.y);
     },
 
     restart: function () {
@@ -329,8 +350,9 @@ function mousePressed() {
         }
     }
     else {
+        let w = windowWidth / 2;
         // check for rock button click
-        if (mouseX > 200 && mouseX < 400 && mouseY > 337 && mouseY < 362) {
+        if (mouseX > rockPosVec.x - w/2 && mouseX < rockPosVec.x + w/2 && mouseY > rockPosVec.y - 12.5 && mouseY < rockPosVec.y + 12.5) {
             if (mouseButton == LEFT) {
                 game.numRocks++;
             }
@@ -340,10 +362,9 @@ function mousePressed() {
                     game.numRocks = 0;
                 }
             }
-
         }
         // check for paper button click
-        if (mouseX > 200 && mouseX < 400 && mouseY > 362 && mouseY < 387) {
+        if (mouseX > paperPosVec.x - w/2 && mouseX < paperPosVec.x + w/2 && mouseY > paperPosVec.y - 12.5 && mouseY < paperPosVec.y + 12.5) {
             if (mouseButton == LEFT) {
                 game.numPapers++;
             }
@@ -355,7 +376,7 @@ function mousePressed() {
             }
         }
         // check for scissors button click
-        if (mouseX > 200 && mouseX < 400 && mouseY > 387 && mouseY < 412) {
+        if (mouseX > scissorPosVec.x - w/2 && mouseX < scissorPosVec.x + w/2 && mouseY > scissorPosVec.y - 12.5 && mouseY < scissorPosVec.y + 12.5) {
             if (mouseButton == LEFT) {
                 game.numScissors++;
             }
@@ -367,7 +388,7 @@ function mousePressed() {
             }
         }
         // check for speed button click
-        if (mouseX > 200 && mouseX < 400 && mouseY > 412 && mouseY < 437) {
+        if (mouseX > speedPosVec.x - w/2 && mouseX < speedPosVec.x + w/2 && mouseY > speedPosVec.y - 12.5 && mouseY < speedPosVec.y + 12.5) {
             if (mouseButton == LEFT) {
                 game.speed++;
                 if (game.speed > 3) {
@@ -382,7 +403,7 @@ function mousePressed() {
             }
         }
         // check for start button click
-        if (mouseX > 200 && mouseX < 400 && mouseY > 512 && mouseY < 537) {
+        if (mouseX > startButtonPosVec.x - w/2 && mouseX < startButtonPosVec.x + w/2 && mouseY > startButtonPosVec.y - 12.5 && mouseY < startButtonPosVec.y + 12.5) {
             game.started = true;
             // clear the objects array
             game.objects = [];
