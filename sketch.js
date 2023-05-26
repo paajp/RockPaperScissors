@@ -121,7 +121,7 @@ let game = {
     images: [],
     // the array of object types
     types: ["rock", "paper", "scissors"],
-    // rules for the game
+    // rules for the game (key beats value)
     rules: {
         rock: "scissors",
         paper: "rock",
@@ -190,13 +190,15 @@ let game = {
             for (let i = 0; i < this.objects.length; i++) {
                 for (let j = 0; j < this.objects.length; j++) {
                     // if the objects are different
-                    // and they are touching
+                    // and they are touching (<25 pixels apart)
                     // and the first object beats the second object
                     // change the second object's type to the first object's type
-                    if (i != j && this.objects[i].type == game.rules[this.objects[j].type] && dist(this.objects[i].x, this.objects[i].y, this.objects[j].x, this.objects[j].y) < 25) {
+                    if (i != j && dist(this.objects[i].x, this.objects[i].y, this.objects[j].x, this.objects[j].y) < 25 && this.rules[this.objects[i].type] == this.objects[j].type) {
                         this.objects[j].type = this.objects[i].type;
                         this.objects[j].image = this.images[this.types.indexOf(this.objects[j].type)];
                     }
+                    
+
                 }
             }
             // display how many of each type of object there are on the screen
@@ -225,15 +227,16 @@ let game = {
         else {
             // display the winner
             fill(255);
-            textSize(32);
-            text(types[0] + " wins!", 200, 200);
-            // display the instructions
-            text("Press any key to restart", 200, 250);
-            // if the user presses a key
-            // restart the game
-            if (keyIsPressed) {
-                this.restart();
-            }
+textSize(windowWidth / 20);
+text(types[0] + " wins!", windowWidth / 4, windowHeight / 3);
+// display the instructions
+textSize(windowWidth / 40);
+text("Press any key to restart", windowWidth / 4, windowHeight / 2.5);
+// if the user presses a key
+// restart the game
+if (keyIsPressed || mouseIsPressed) {
+    this.restart();
+}
         }
     },
     // the games start method
