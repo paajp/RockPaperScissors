@@ -18,7 +18,7 @@ class ObjectRPS {
         // the object's image
         this.image = game.images[game.types.indexOf(this.type)];
         // the object's position
-        this.x = random(0, width);
+        this.x = random(10, width);
         this.y = random(0, height);
     }
 
